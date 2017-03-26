@@ -3,6 +3,7 @@
   "version": "0.1.1",
   "description": "Extracts string messages for translation from modules that use React Intl.",
   "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
   "scripts": {
     "test": "rm -rf test/fixture/*.js && mocha --compilers ts:ts-node/register",
     "prepublish": "tsc"
