@@ -1,0 +1,42 @@
+{
+  "name": "ts-transform-react-intl",
+  "version": "0.1.0",
+  "description": "Extracts string messages for translation from modules that use React Intl.",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "rm -rf test/fixture/*.js && mocha --compilers ts:ts-node/register"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/longlho/ts-transform-react-intl.git"
+  },
+  "keywords": [
+    "typescript",
+    "transform",
+    "react",
+    "intl",
+    "i18n",
+    "react-intl"
+  ],
+  "author": "Long Ho",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/longlho/ts-transform-react-intl/issues"
+  },
+  "homepage": "https://github.com/longlho/ts-transform-react-intl#readme",
+  "devDependencies": {
+    "@types/chai": "^3.4.35",
+    "@types/fs-extra": "^2.0.0",
+    "@types/mocha": "^2.2.40",
+    "@types/node": "^6.0.66",
+    "@types/react-intl": "^2.2.4",
+    "chai": "^3.5.0",
+    "fs-extra": "^2.1.2",
+    "glob": "^7.1.1",
+    "mocha": "^3.2.0",
+    "react": "^15.4.2",
+    "react-intl": "^2.2.3",
+    "ts-node": "^3.0.2",
+    "typescript": "^2.3.0-dev.20170326"
+  }
+}
