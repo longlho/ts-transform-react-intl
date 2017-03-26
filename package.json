@@ -4,7 +4,8 @@
   "description": "Extracts string messages for translation from modules that use React Intl.",
   "main": "dist/index.js",
   "scripts": {
-    "test": "rm -rf test/fixture/*.js && mocha --compilers ts:ts-node/register"
+    "test": "rm -rf test/fixture/*.js && mocha --compilers ts:ts-node/register",
+    "prepublish": "tsc"
   },
   "repository": {
     "type": "git",
