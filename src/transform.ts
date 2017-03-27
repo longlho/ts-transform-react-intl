@@ -98,7 +98,6 @@ export default function (opts: Opts) {
         const visitor: ts.Visitor = (node: ts.Node): ts.Node => {
             switch (node.kind) {
                 case ts.SyntaxKind.CallExpression:
-                    console.log((node as ts.CallExpression).expression.getText())
                     if ((node as ts.CallExpression).expression.getText() === DEFINE_MESSAGES_HOOK) {
                         const trans = {}
                         return ts.visitEachChild(
