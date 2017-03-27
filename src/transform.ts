@@ -19,19 +19,18 @@ function trimSingleQuote (txt: string): string {
  * @param {ts.ObjectLiteralExpression} node object literal
  * @returns {Messages}
  */
-function extractMessageDescriptor (node: ts.ObjectLiteralExpression, idPrefix?: string): Messages {
+function extractMessageDescriptor (node: ts.ObjectLiteralExpression, idPrefix?: string): FormattedMessage.MessageDescriptor {
     const msg: FormattedMessage.MessageDescriptor = {
         id: '',
         description: '',
         defaultMessage: ''
     }
 
-    let id
     // Go thru each property
     ts.forEachChild(node, (p: ts.PropertyAssignment) => {
         switch (p.name.getText()) {
         case 'id':
-            id = trimSingleQuote(p.initializer.getText())
+            const id = trimSingleQuote(p.initializer.getText())
             msg.id = idPrefix ? `${idPrefix}_${id}` : id
             break
         case 'description':
@@ -43,13 +42,7 @@ function extractMessageDescriptor (node: ts.ObjectLiteralExpression, idPrefix?: 
         }
     })
 
-    if (!id) {
-        return {}
-    }
-
-    return {
-        [id]: msg
-    }
+    return msg
 }
 
 /**
@@ -108,8 +101,7 @@ export default function (opts: Opts) {
                             if (node.kind !== ts.SyntaxKind.PropertyAssignment) {
                                 return
                             }
-
-                            Object.assign(trans, extractMessageDescriptor(node.initializer as ts.ObjectLiteralExpression, opts.idPrefix))
+                            trans[node.name.getText()] = extractMessageDescriptor(node.initializer as ts.ObjectLiteralExpression, opts.idPrefix)
                         })
 
                         const newNode = ts.createNode(ts.SyntaxKind.ObjectLiteralExpression) as ts.ObjectLiteralExpression
