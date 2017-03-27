@@ -23,12 +23,11 @@ function extractMessageDescriptor(node, idPrefix) {
         description: '',
         defaultMessage: ''
     };
-    let id;
     // Go thru each property
     ts.forEachChild(node, (p) => {
         switch (p.name.getText()) {
             case 'id':
-                id = trimSingleQuote(p.initializer.getText());
+                const id = trimSingleQuote(p.initializer.getText());
                 msg.id = idPrefix ? `${idPrefix}_${id}` : id;
                 break;
             case 'description':
@@ -39,12 +38,7 @@ function extractMessageDescriptor(node, idPrefix) {
                 break;
         }
     });
-    if (!id) {
-        return {};
-    }
-    return {
-        [id]: msg
-    };
+    return msg;
 }
 /**
  * Create simple obj { k: v }
@@ -91,7 +85,7 @@ function default_1(opts) {
                             if (node.kind !== ts.SyntaxKind.PropertyAssignment) {
                                 return;
                             }
-                            Object.assign(trans, extractMessageDescriptor(node.initializer, opts.idPrefix));
+                            trans[node.name.getText()] = extractMessageDescriptor(node.initializer, opts.idPrefix);
                         });
                         const newNode = ts.createNode(ts.SyntaxKind.ObjectLiteralExpression);
                         // Convert translations to raw json object

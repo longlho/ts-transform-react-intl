@@ -13,7 +13,7 @@ const CJS_CONFIG = {
     jsx: ts.JsxEmit.React,
     module: ts.ModuleKind.CommonJS,
     moduleResolution: ts.ModuleResolutionKind.NodeJs,
-    noEmitOnError: true,
+    noEmitOnError: false,
     noUnusedLocals: true,
     noUnusedParameters: true,
     stripInternal: true,

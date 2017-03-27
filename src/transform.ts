@@ -45,44 +45,6 @@ function extractMessageDescriptor (node: ts.ObjectLiteralExpression, idPrefix?: 
     return msg
 }
 
-/**
- * Create simple obj { k: v }
- *
- * @param {string} k
- * @param {string} v
- * @returns {ts.PropertyAssignment}
- */
-function createObjKeyValue (k: string, v: string): ts.PropertyAssignment {
-    const obj = ts.createNode(ts.SyntaxKind.PropertyAssignment) as ts.PropertyAssignment
-    const key = ts.createNode(ts.SyntaxKind.Identifier) as ts.Identifier
-    key.text = k
-
-    const value = ts.createNode(ts.SyntaxKind.StringLiteral) as ts.StringLiteral
-    value.text = v
-
-    obj.name = key
-    obj.initializer = value
-    return obj
-}
-
-/**
- * Transform MessageDescriptor to ObjectLiteralExpression
- *
- * @param {MessageDescriptor} msg
- * @param {string} [idPrefix]
- * @returns {ts.ObjectLiteralExpression}
- */
-function createIntlMessage (msg: FormattedMessage.MessageDescriptor): ts.ObjectLiteralExpression {
-    const node = ts.createNode(ts.SyntaxKind.ObjectLiteralExpression) as ts.ObjectLiteralExpression
-    const properties = [
-        createObjKeyValue('id', msg.id),
-        createObjKeyValue('description', msg.description),
-        createObjKeyValue('defaultMessage', msg.defaultMessage)
-    ] as ts.NodeArray<ts.ObjectLiteralElementLike>
-    node.properties = properties
-    return node
-}
-
 export type Extractor = (messages: Messages) => void
 
 export interface Opts {
@@ -90,36 +52,60 @@ export interface Opts {
     onMsgExtracted?: Extractor
 }
 
+function messagesVisitor (ctx: ts.TransformationContext, trans: {}, opts: Opts) {
+    const visitor = (node: ts.Node): ts.Node => {
+        if (node.kind !== ts.SyntaxKind.PropertyAssignment) {
+            return ts.visitEachChild(node, visitor, ctx)
+        }
+
+        if ((node as ts.PropertyAssignment).initializer.kind !== ts.SyntaxKind.ObjectLiteralExpression) {
+            return ts.visitEachChild(node, visitor, ctx)
+        }
+
+        const msg = extractMessageDescriptor((node as ts.PropertyAssignment).initializer as ts.ObjectLiteralExpression, opts.idPrefix)
+
+        trans[(node as ts.PropertyAssignment).name.getText()] = msg
+
+        const newMsgNode = ts.createNode(ts.SyntaxKind.ObjectLiteralExpression) as ts.ObjectLiteralExpression
+
+        // Convert translations to raw json object
+        newMsgNode.properties = Object.keys(msg).map(k => {
+            const obj = ts.createNode(ts.SyntaxKind.PropertyAssignment) as ts.PropertyAssignment
+            const key = ts.createNode(ts.SyntaxKind.Identifier) as ts.Identifier
+            const value = ts.createNode(ts.SyntaxKind.StringLiteral) as ts.StringLiteral
+            key.text = k
+            value.text = msg[k]
+            obj.name = key
+            obj.initializer = value
+            return obj
+        }) as ts.NodeArray<ts.ObjectLiteralElementLike>
+
+        if (typeof opts.onMsgExtracted === 'function') {
+            opts.onMsgExtracted(trans)
+        }
+
+        const newAssignment = ts.createNode(ts.SyntaxKind.PropertyAssignment) as ts.PropertyAssignment
+        newAssignment.name = (node as ts.PropertyAssignment).name
+        newAssignment.initializer = newMsgNode
+
+        return newAssignment
+    }
+    return visitor
+}
+
 export default function (opts: Opts) {
     return (ctx: ts.TransformationContext): ts.Transformer<ts.SourceFile> => {
         const visitor: ts.Visitor = (node: ts.Node): ts.Node => {
             switch (node.kind) {
                 case ts.SyntaxKind.CallExpression:
+                    console.log((node as ts.CallExpression).expression.getText())
                     if ((node as ts.CallExpression).expression.getText() === DEFINE_MESSAGES_HOOK) {
                         const trans = {}
-                        ts.forEachChild((node as ts.CallExpression).arguments[0], (node: ts.PropertyAssignment) => {
-                            if (node.kind !== ts.SyntaxKind.PropertyAssignment) {
-                                return
-                            }
-                            trans[node.name.getText()] = extractMessageDescriptor(node.initializer as ts.ObjectLiteralExpression, opts.idPrefix)
-                        })
-
-                        const newNode = ts.createNode(ts.SyntaxKind.ObjectLiteralExpression) as ts.ObjectLiteralExpression
-
-                        // Convert translations to raw json object
-                        newNode.properties = Object.keys(trans).map(k => {
-                            const obj = ts.createNode(ts.SyntaxKind.PropertyAssignment) as ts.PropertyAssignment
-                            const key = ts.createNode(ts.SyntaxKind.Identifier) as ts.Identifier
-                            key.text = k
-                            obj.name = key
-                            obj.initializer = createIntlMessage(trans[k])
-                            return obj
-                        }) as ts.NodeArray<ts.ObjectLiteralElementLike>
-
-                        if (typeof opts.onMsgExtracted === 'function') {
-                            opts.onMsgExtracted(trans)
-                        }
-                        return newNode
+                        return ts.visitEachChild(
+                            node,
+                            messagesVisitor(ctx, trans, opts),
+                            ctx
+                        )
                     }
                     // Fallthru
                 default:
