@@ -1,6 +1,6 @@
 {
   "name": "ts-transform-react-intl",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Extracts string messages for translation from modules that use React Intl.",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -31,6 +31,7 @@
     "@types/fs-extra": "^2.0.0",
     "@types/mocha": "^2.2.40",
     "@types/node": "^6.0.66",
+    "@types/react": "^15.0.23",
     "@types/react-intl": "^2.2.4",
     "chai": "^3.5.0",
     "fs-extra": "^2.1.2",
@@ -39,6 +40,6 @@
     "react": "^15.4.2",
     "react-intl": "^2.2.3",
     "ts-node": "^3.0.2",
-    "typescript": "^2.3.0-dev.20170326"
+    "typescript": "2.3"
   }
 }
