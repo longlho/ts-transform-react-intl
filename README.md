@@ -1,5 +1,7 @@
 # ts-transform-react-intl
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/longlho/ts-transform-react-intl.svg)](https://greenkeeper.io/)
+
 [![npm version](https://badge.fury.io/js/ts-transform-react-intl.svg)](https://badge.fury.io/js/ts-transform-react-intl)
 [![travis](https://travis-ci.org/longlho/ts-transform-react-intl.svg?branch=master)](https://travis-ci.org/longlho/ts-transform-react-intl)
 
