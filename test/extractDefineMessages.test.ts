@@ -3,6 +3,7 @@ import { resolve } from 'path'
 import { expect } from 'chai'
 
 describe('extractDefineMessages', function () {
+    this.timeout(5000)
     it('should be able to extract messages', function () {
         expect(compile(resolve(__dirname, 'fixture/*.ts'))).to.deep.equal({
             'ts-transform-react-intl_bar2': {
