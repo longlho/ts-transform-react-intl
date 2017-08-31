@@ -40,6 +40,6 @@
     "react": "^15.4.2",
     "react-intl": "^2.2.3",
     "ts-node": "^3.0.2",
-    "typescript": "~2.4.1"
+    "typescript": "~2.5.2"
   }
 }
