@@ -10,6 +10,7 @@
         "noUnusedParameters": true,
         "stripInternal": true,
         "jsx": "react",
+        "noImplicitAny": true,
         "outDir": "dist"
     },
     "include": [

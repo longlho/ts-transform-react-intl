@@ -62,7 +62,7 @@ export interface Opts {
     onMsgExtracted?: Extractor
 }
 
-function messagesVisitor(ctx: ts.TransformationContext, trans: {}, opts: Opts, sf: ts.SourceFile) {
+function messagesVisitor(ctx: ts.TransformationContext, trans: Messages, opts: Opts, sf: ts.SourceFile) {
     const visitor = (node: ts.Node): ts.Node => {
         if (node.kind !== ts.SyntaxKind.PropertyAssignment) {
             return ts.visitEachChild(node, visitor, ctx)
@@ -89,7 +89,7 @@ function messagesVisitor(ctx: ts.TransformationContext, trans: {}, opts: Opts, s
                 (node as ts.PropertyAssignment).name,
                 ts.createObjectLiteral(
                     ts.createNodeArray(
-                        Object.keys(msg).map(k =>
+                        Object.keys(msg).map((k: keyof FormattedMessage.MessageDescriptor) =>
                             ts.createPropertyAssignment(ts.createLiteral(k), ts.createLiteral(msg[k]))
                         )
                     )

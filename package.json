@@ -30,6 +30,7 @@
   "devDependencies": {
     "@types/chai": "^4.0.4",
     "@types/fs-extra": "^4.0.2",
+    "@types/glob": "^5.0.32",
     "@types/mocha": "^2.2.43",
     "@types/node": "^8.0.28",
     "@types/react": "^16.0.5",

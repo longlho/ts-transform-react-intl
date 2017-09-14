@@ -9,10 +9,13 @@ import { Extractor } from './transform'
  * @returns {Extractor} extractor fn
  */
 export default function aggregate(msgs: Messages): Extractor {
-    const defaultMessages = Object.keys(msgs).reduce((all, k) => {
-        all[msgs[k].defaultMessage] = msgs[k]
-        return all
-    }, {})
+    const defaultMessages = Object.keys(msgs).reduce(
+        (all, k) => {
+            all[msgs[k].defaultMessage] = msgs[k]
+            return all
+        },
+        {} as Messages
+    )
 
     return (trans: Messages) =>
         Object.keys(trans).forEach(k => {
