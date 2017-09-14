@@ -1,12 +1,12 @@
 {
   "name": "ts-transform-react-intl",
-  "version": "0.1.7",
+  "version": "0.2.0",
   "description": "Extracts string messages for translation from modules that use React Intl.",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
     "test": "rm -rf test/fixture/*.js && mocha --compilers ts:ts-node/register",
-    "prepublish": "tsc"
+    "prepublishOnly": "tsc"
   },
   "repository": {
     "type": "git",
@@ -27,19 +27,19 @@
   },
   "homepage": "https://github.com/longlho/ts-transform-react-intl#readme",
   "devDependencies": {
-    "@types/chai": "^4.0.1",
-    "@types/fs-extra": "^4.0.0",
-    "@types/mocha": "^2.2.40",
-    "@types/node": "^8.0.4",
-    "@types/react": "^16.0.0",
-    "@types/react-intl": "^2.2.4",
-    "chai": "^4.0.2",
-    "fs-extra": "^4.0.0",
-    "glob": "^7.1.1",
-    "mocha": "^3.2.0",
-    "react": "^15.4.2",
-    "react-intl": "^2.2.3",
-    "ts-node": "^3.0.2",
-    "typescript": "~2.4.1"
+    "@types/chai": "^4.0.4",
+    "@types/fs-extra": "^4.0.2",
+    "@types/mocha": "^2.2.43",
+    "@types/node": "^8.0.28",
+    "@types/react": "^16.0.5",
+    "@types/react-intl": "^2.3.1",
+    "chai": "^4.1.2",
+    "fs-extra": "^4.0.2",
+    "glob": "^7.1.2",
+    "mocha": "^3.5.3",
+    "react": "^15.6.1",
+    "react-intl": "^2.4.0",
+    "ts-node": "^3.3.0",
+    "typescript": "~2.5.2"
   }
 }

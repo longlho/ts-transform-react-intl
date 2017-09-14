@@ -81,16 +81,16 @@ function messagesVisitor(ctx: ts.TransformationContext, trans: {}, opts: Opts, s
             const newMsgNode = ts.createNode(ts.SyntaxKind.ObjectLiteralExpression) as ts.ObjectLiteralExpression
 
             // Convert translations to raw json object
-            newMsgNode.properties = Object.keys(msg).map(k => {
+            newMsgNode.properties = ts.createNodeArray(Object.keys(msg).map(k => {
                 const obj = ts.createNode(ts.SyntaxKind.PropertyAssignment) as ts.PropertyAssignment
                 const key = ts.createNode(ts.SyntaxKind.Identifier) as ts.Identifier
                 const value = ts.createNode(ts.SyntaxKind.StringLiteral) as ts.StringLiteral
-                key.text = k
+                key.escapedText = k as ts.__String
                 value.text = msg[k]
                 obj.name = key
                 obj.initializer = value
                 return obj
-            }) as ts.NodeArray<ts.ObjectLiteralElementLike>
+            }))
 
             const newAssignment = ts.createNode(ts.SyntaxKind.PropertyAssignment) as ts.PropertyAssignment
             newAssignment.name = (node as ts.PropertyAssignment).name
