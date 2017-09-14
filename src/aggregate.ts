@@ -8,7 +8,7 @@ import { Extractor } from './transform'
  * @param {Messages} msgs messages map to aggregate to
  * @returns {Extractor} extractor fn
  */
-export default function aggregate (msgs: Messages): Extractor {
+export default function aggregate(msgs: Messages): Extractor {
     const defaultMessages = Object.keys(msgs).reduce((all, k) => {
         all[msgs[k].defaultMessage] = msgs[k]
         return all
@@ -22,10 +22,7 @@ export default function aggregate (msgs: Messages): Extractor {
             // description & defaultMessage
             if (
                 msgs[id] &&
-                (
-                    msgs[id].description !== msg.description ||
-                    msgs[id].defaultMessage !== msg.defaultMessage
-                )
+                (msgs[id].description !== msg.description || msgs[id].defaultMessage !== msg.defaultMessage)
             ) {
                 console.error(`
 --- [ERR] Translation key ${k} already exists ---
@@ -40,10 +37,8 @@ Default Message: "${msgs[id].defaultMessage}" vs "${defaultMessage}"
             // For ex: Close can be Close Price or Close button
             if (
                 defaultMessages[defaultMessage] &&
-                (
-                    defaultMessages[defaultMessage].description !== msg.description ||
-                    defaultMessages[defaultMessage].id !== msg.id
-                )
+                (defaultMessages[defaultMessage].description !== msg.description ||
+                    defaultMessages[defaultMessage].id !== msg.id)
             ) {
                 console.warn(`
 --- [WARN]: Default Message ${defaultMessage} already exists ---

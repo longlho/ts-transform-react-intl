@@ -9,7 +9,7 @@ export const DEFINE_MESSAGES_HOOK = 'defineMessages'
  * @param {string} txt text
  * @returns trimmed string
  */
-function trimSingleQuote (txt: string): string {
+function trimSingleQuote(txt: string): string {
     return txt.substr(1, txt.length - 2)
 }
 
@@ -19,26 +19,29 @@ function trimSingleQuote (txt: string): string {
  * @param {ts.ObjectLiteralExpression} node object literal
  * @returns {Messages}
  */
-function extractMessageDescriptor (node: ts.ObjectLiteralExpression, idPrefix?: string): FormattedMessage.MessageDescriptor {
+function extractMessageDescriptor(
+    node: ts.ObjectLiteralExpression,
+    idPrefix?: string
+): FormattedMessage.MessageDescriptor {
     const msg: FormattedMessage.MessageDescriptor = {
         id: '',
         description: '',
-        defaultMessage: ''
+        defaultMessage: '',
     }
 
     // Go thru each property
     ts.forEachChild(node, (p: ts.PropertyAssignment) => {
         switch ((p.name as ts.Identifier).getText()) {
-        case 'id':
-            const id = trimSingleQuote((p.initializer as ts.Identifier).getText())
-            msg.id = idPrefix ? `${idPrefix}_${id}` : id
-            break
-        case 'description':
-            msg.description = trimSingleQuote((p.initializer as ts.Identifier).getText())
-            break
-        case 'defaultMessage':
-            msg.defaultMessage = trimSingleQuote((p.initializer as ts.Identifier).getText())
-            break
+            case 'id':
+                const id = trimSingleQuote((p.initializer as ts.Identifier).getText())
+                msg.id = idPrefix ? `${idPrefix}_${id}` : id
+                break
+            case 'description':
+                msg.description = trimSingleQuote((p.initializer as ts.Identifier).getText())
+                break
+            case 'defaultMessage':
+                msg.defaultMessage = trimSingleQuote((p.initializer as ts.Identifier).getText())
+                break
         }
     })
 
@@ -69,7 +72,10 @@ function messagesVisitor(ctx: ts.TransformationContext, trans: {}, opts: Opts, s
             return ts.visitEachChild(node, visitor, ctx)
         }
 
-        const msg = extractMessageDescriptor((node as ts.PropertyAssignment).initializer as ts.ObjectLiteralExpression, opts.idPrefix)
+        const msg = extractMessageDescriptor(
+            (node as ts.PropertyAssignment).initializer as ts.ObjectLiteralExpression,
+            opts.idPrefix
+        )
 
         trans[((node as ts.PropertyAssignment).name as ts.Identifier).getText()] = msg
 
@@ -78,25 +84,17 @@ function messagesVisitor(ctx: ts.TransformationContext, trans: {}, opts: Opts, s
         }
 
         if (!opts.extractOnly) {
-            const newMsgNode = ts.createNode(ts.SyntaxKind.ObjectLiteralExpression) as ts.ObjectLiteralExpression
-
             // Convert translations to raw json object
-            newMsgNode.properties = ts.createNodeArray(Object.keys(msg).map(k => {
-                const obj = ts.createNode(ts.SyntaxKind.PropertyAssignment) as ts.PropertyAssignment
-                const key = ts.createNode(ts.SyntaxKind.Identifier) as ts.Identifier
-                const value = ts.createNode(ts.SyntaxKind.StringLiteral) as ts.StringLiteral
-                key.escapedText = k as ts.__String
-                value.text = msg[k]
-                obj.name = key
-                obj.initializer = value
-                return obj
-            }))
-
-            const newAssignment = ts.createNode(ts.SyntaxKind.PropertyAssignment) as ts.PropertyAssignment
-            newAssignment.name = (node as ts.PropertyAssignment).name
-            newAssignment.initializer = newMsgNode
-
-            return newAssignment
+            return ts.createPropertyAssignment(
+                (node as ts.PropertyAssignment).name,
+                ts.createObjectLiteral(
+                    ts.createNodeArray(
+                        Object.keys(msg).map(k =>
+                            ts.createPropertyAssignment(ts.createLiteral(k), ts.createLiteral(msg[k]))
+                        )
+                    )
+                )
+            )
         }
 
         return ts.visitEachChild(node, visitor, ctx)
@@ -104,19 +102,18 @@ function messagesVisitor(ctx: ts.TransformationContext, trans: {}, opts: Opts, s
     return visitor
 }
 
-export default function (opts: Opts) {
+export default function(opts: Opts) {
     return (ctx: ts.TransformationContext): ts.Transformer<ts.SourceFile> => {
-        function getVisitor (sf: ts.SourceFile) {
+        function getVisitor(sf: ts.SourceFile) {
             const visitor: ts.Visitor = (node: ts.Node): ts.Node => {
                 switch (node.kind) {
                     case ts.SyntaxKind.CallExpression:
-                        if (((node as ts.CallExpression).expression as ts.Identifier).getText(sf) === DEFINE_MESSAGES_HOOK) {
+                        if (
+                            ((node as ts.CallExpression).expression as ts.Identifier).getText(sf) ===
+                            DEFINE_MESSAGES_HOOK
+                        ) {
                             const trans = {}
-                            return ts.visitEachChild(
-                                node,
-                                messagesVisitor(ctx, trans, opts, sf),
-                                ctx
-                            )
+                            return ts.visitEachChild(node, messagesVisitor(ctx, trans, opts, sf), ctx)
                         }
                         break
                 }

@@ -1,11 +1,12 @@
 {
   "name": "ts-transform-react-intl",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Extracts string messages for translation from modules that use React Intl.",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
     "test": "rm -rf test/fixture/*.js && mocha --compilers ts:ts-node/register",
+    "prettier": "prettier --print-width=120 --tab-width=4 --single-quote --trailing-comma=es5 --no-semi --parser=typescript --write 'src/**/*.ts*' || true",
     "prepublishOnly": "tsc"
   },
   "repository": {
@@ -37,9 +38,15 @@
     "fs-extra": "^4.0.2",
     "glob": "^7.1.2",
     "mocha": "^3.5.3",
+    "pre-commit": "^1.2.2",
+    "prettier": "^1.7.0",
     "react": "^15.6.1",
     "react-intl": "^2.4.0",
     "ts-node": "^3.3.0",
     "typescript": "~2.5.2"
-  }
+  },
+  "pre-commit": [
+    "prettier",
+    "test"
+  ]
 }
