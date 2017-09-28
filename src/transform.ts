@@ -90,7 +90,7 @@ function messagesVisitor(ctx: ts.TransformationContext, trans: Messages, opts: O
                 ts.createObjectLiteral(
                     ts.createNodeArray(
                         Object.keys(msg).map((k: keyof FormattedMessage.MessageDescriptor) =>
-                            ts.createPropertyAssignment(ts.createLiteral(k), ts.createLiteral(msg[k]))
+                            ts.createPropertyAssignment(ts.createIdentifier(k), ts.createLiteral(msg[k]))
                         )
                     )
                 )
