@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
-    "test": "rm -rf test/fixture/*.js && mocha --compilers ts:ts-node/register",
+    "test": "rm -rf test/fixture/*.js && mocha --require ts-node/register test/*.test.ts",
     "prettier": "prettier --print-width=120 --tab-width=4 --single-quote --trailing-comma=es5 --no-semi --parser=typescript --write 'src/**/*.ts*' || true",
     "prepublishOnly": "tsc"
   },
@@ -30,21 +30,21 @@
   "devDependencies": {
     "@types/chai": "^4.0.4",
     "@types/fs-extra": "^4.0.2",
-    "@types/glob": "^5.0.32",
+    "@types/glob": "^5.0.33",
     "@types/mocha": "^2.2.43",
-    "@types/node": "^8.0.28",
-    "@types/react": "^16.0.5",
-    "@types/react-intl": "^2.3.1",
+    "@types/node": "^8.0.46",
+    "@types/react": "^16.0.15",
+    "@types/react-intl": "^2.3.2",
     "chai": "^4.1.2",
     "fs-extra": "^4.0.2",
     "glob": "^7.1.2",
     "mocha": "^4.0.0",
     "pre-commit": "^1.2.2",
-    "prettier": "^1.7.0",
+    "prettier": "^1.7.4",
     "react": "^16.0.0",
     "react-intl": "^2.4.0",
     "ts-node": "^3.3.0",
-    "typescript": "~2.5.2"
+    "typescript": "^2.5.3"
   },
   "pre-commit": [
     "prettier",
