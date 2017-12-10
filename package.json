@@ -43,7 +43,7 @@
     "prettier": "^1.7.4",
     "react": "^16.0.0",
     "react-intl": "^2.4.0",
-    "ts-node": "^3.3.0",
+    "ts-node": "^4.0.0",
     "typescript": "^2.5.3"
   },
   "pre-commit": [
