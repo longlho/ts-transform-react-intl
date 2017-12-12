@@ -29,7 +29,7 @@
   "homepage": "https://github.com/longlho/ts-transform-react-intl#readme",
   "devDependencies": {
     "@types/chai": "^4.0.4",
-    "@types/fs-extra": "^4.0.2",
+    "@types/fs-extra": "^5.0.0",
     "@types/glob": "^5.0.33",
     "@types/mocha": "^2.2.43",
     "@types/node": "^8.0.46",
