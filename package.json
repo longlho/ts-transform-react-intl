@@ -1,17 +1,19 @@
 {
   "name": "ts-transform-react-intl",
-  "version": "0.2.3",
+  "version": "0.0.0-development",
   "description": "Extracts string messages for translation from modules that use React Intl.",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
     "test": "rm -rf test/fixture/*.js && mocha --require ts-node/register test/*.test.ts",
     "prettier": "prettier --print-width=120 --tab-width=4 --single-quote --trailing-comma=es5 --no-semi --parser=typescript --write 'src/**/*.ts*' || true",
-    "prepublishOnly": "tsc"
+    "prepublishOnly": "tsc",
+    "travis-deploy-once": "travis-deploy-once",
+    "semantic-release": "semantic-release"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/longlho/ts-transform-react-intl.git"
+    "url": "https://github.com/longlho/ts-transform-react-intl.git"
   },
   "keywords": [
     "typescript",
@@ -44,7 +46,9 @@
     "react": "^16.2.0",
     "react-intl": "^2.7.1",
     "ts-node": "^7.0.0",
-    "typescript": "3"
+    "typescript": "3",
+    "travis-deploy-once": "^5.0.9",
+    "semantic-release": "^15.9.17"
   },
   "pre-commit": [
     "prettier",
