@@ -1,6 +1,6 @@
-import { _ } from "../../";
+import { _ as _d } from "../../";
 
-export const strings = _({
+export const strings = _d({
   foo: {
     id: "foo2",
     description: "description foo",
