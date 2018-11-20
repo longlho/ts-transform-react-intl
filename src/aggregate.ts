@@ -1,4 +1,4 @@
-import { Messages } from "./types";
+import { Messages, MessageDescriptor } from "./types";
 import { Extractor } from "./transform";
 
 /**
@@ -17,42 +17,40 @@ export function aggregate(msgs: Messages): Extractor {
     {} as Messages
   );
 
-  return (trans: Messages) =>
-    Object.keys(trans).forEach(k => {
-      const msg = trans[k];
-      const { id, description, defaultMessage } = trans[k];
-      // Throw an error if we have messages with the same ID but different
-      // description & defaultMessage
-      if (
-        msgs[id] &&
-        (msgs[id].description !== msg.description ||
-          msgs[id].defaultMessage !== msg.defaultMessage)
-      ) {
-        console.error(`
---- [ERR] Translation key ${k} already exists ---
+  return (msgId: string, msg: MessageDescriptor) => {
+    const { id, description, defaultMessage } = msg;
+    // Throw an error if we have messages with the same ID but different
+    // description & defaultMessage
+    if (
+      msgs[id] &&
+      (msgs[id].description !== msg.description ||
+        msgs[id].defaultMessage !== msg.defaultMessage)
+    ) {
+      console.error(`
+--- [ERR] Translation key ${msgId} already exists ---
 Description: "${msgs[id].description}" vs "${description}"
 Default Message: "${msgs[id].defaultMessage}" vs "${defaultMessage}"
 `);
-        return process.exit(1);
-      }
+      return process.exit(1);
+    }
 
-      // Warn if we have 2 messages with the same defaultMessage,
-      // but different ID/description
-      // For ex: Close can be Close Price or Close button
-      if (
-        defaultMessages[defaultMessage] &&
-        (defaultMessages[defaultMessage].description !== msg.description ||
-          defaultMessages[defaultMessage].id !== msg.id)
-      ) {
-        console.warn(`
+    // Warn if we have 2 messages with the same defaultMessage,
+    // but different ID/description
+    // For ex: Close can be Close Price or Close button
+    if (
+      defaultMessages[defaultMessage] &&
+      (defaultMessages[defaultMessage].description !== msg.description ||
+        defaultMessages[defaultMessage].id !== msg.id)
+    ) {
+      console.warn(`
 --- [WARN]: Default Message ${defaultMessage} already exists ---
 Description: "${
-          defaultMessages[defaultMessage].description
-        }" vs "${description}"
+        defaultMessages[defaultMessage].description
+      }" vs "${description}"
 ID: "${defaultMessages[defaultMessage].id}" vs "${id}"
 `);
-      }
-      msgs[id] = msg;
-      defaultMessages[defaultMessage] = msg;
-    });
+    }
+    msgs[msgId] = msg;
+    defaultMessages[defaultMessage] = msg;
+  };
 }

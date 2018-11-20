@@ -8,12 +8,12 @@ describe("extractDefineMessages", function() {
     expect(
       compile(resolve(__dirname, "fixture/defineMessage.ts"))
     ).to.deep.equal({
-      "3nxZQB0eo3": {
+      bar: {
         id: "3nxZQB0eo3",
         description: "description bar",
         defaultMessage: "defaultMessage bar"
       },
-      jv83iiJolI: {
+      foo: {
         id: "jv83iiJolI",
         description: "description foo",
         defaultMessage: "defaultMessage foo"
@@ -36,12 +36,12 @@ describe("extractDefineMessages", function() {
     expect(
       compile(resolve(__dirname, "fixture/messageAlias.ts"))
     ).to.deep.equal({
-      "3nxZQB0eo3": {
+      bar: {
         id: "3nxZQB0eo3",
         description: "description bar",
         defaultMessage: "defaultMessage bar"
       },
-      jv83iiJolI: {
+      foo: {
         id: "jv83iiJolI",
         description: "description foo",
         defaultMessage: "defaultMessage foo"

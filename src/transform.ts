@@ -1,9 +1,13 @@
 import * as ts from "typescript";
-import { MessageDescriptor, Messages } from "./types";
+import { MessageDescriptor } from "./types";
 import { _ } from "./macro";
 import { interpolateName } from "loader-utils";
 
-export type Extractor = (messages: Messages, filename?: string) => void;
+export type Extractor = (
+  msgId: string,
+  messages: MessageDescriptor,
+  filename?: string
+) => void;
 
 export type InterpolateNameFn = (
   sourceFileName: string,
@@ -198,7 +202,6 @@ export function transform(opts: Opts) {
         const msgObjLiteral = (node as ts.CallExpression)
           .arguments[0] as ts.ObjectLiteralExpression;
 
-        const trans: Messages = {};
         const props = msgObjLiteral.properties.map(prop => {
           // We have to do this inline instead of filter so that
           // typechecking works
@@ -215,10 +218,8 @@ export function transform(opts: Opts) {
             opts.baseUrl
           );
 
-          trans[prop.name.getText(sf)] = msg;
-
           if (typeof opts.onMsgExtracted === "function") {
-            opts.onMsgExtracted(trans, sf.fileName);
+            opts.onMsgExtracted(prop.name.getText(sf), msg, sf.fileName);
           }
 
           if (!opts.extractOnly) {
