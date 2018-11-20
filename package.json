@@ -1,6 +1,6 @@
 {
   "name": "ts-transform-react-intl",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Extracts string messages for translation from modules that use React Intl.",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",

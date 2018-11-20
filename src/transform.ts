@@ -187,6 +187,9 @@ export function transform(opts: Opts) {
             opts.macroImportName,
             opts.macroModuleSpecifier
           );
+          if (hook) {
+            return null;
+          }
         }
 
         if (!isMacroExpression(node, sf, hook)) {
