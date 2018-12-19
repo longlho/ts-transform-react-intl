@@ -30,13 +30,6 @@ export interface Opts {
    */
   macroModuleSpecifier?: string;
   /**
-   * Don't transform, only extract
-   *
-   * @type {boolean}
-   * @memberOf Opts
-   */
-  extractOnly?: boolean;
-  /**
    * Callback function that gets called everytime we encountered something
    * that looks like a MessageDescriptor
    *
@@ -163,7 +156,7 @@ function isMacroExpression(
   node: ts.Node,
   sf: ts.SourceFile,
   hook: string
-): boolean {
+): node is ts.CallExpression & boolean {
   // Make sure it's a function call
   return (
     hook &&
@@ -196,55 +189,30 @@ export function transform(opts: Opts) {
           }
         }
 
+        // If it's not our macro, skip
         if (!isMacroExpression(node, sf, hook)) {
           return ts.visitEachChild(node, visitor, ctx);
         }
-        const msgObjLiteral = (node as ts.CallExpression)
-          .arguments[0] as ts.ObjectLiteralExpression;
+        const msgObjLiteral = node.arguments[0] as ts.ObjectLiteralExpression;
 
-        const props = msgObjLiteral.properties.map(prop => {
-          // We have to do this inline instead of filter so that
-          // typechecking works
-          if (
-            !ts.isPropertyAssignment(prop) ||
-            !ts.isObjectLiteralExpression(prop.initializer)
-          ) {
-            return;
-          }
-          const msg = extractMessageDescriptor(
-            prop.initializer,
-            sf,
-            opts.interpolateName,
-            opts.baseUrl
-          );
+        const msg = extractMessageDescriptor(
+          msgObjLiteral,
+          sf,
+          opts.interpolateName,
+          opts.baseUrl
+        );
 
-          if (typeof opts.onMsgExtracted === "function") {
-            opts.onMsgExtracted(prop.name.getText(sf), msg, sf.fileName);
-          }
+        if (typeof opts.onMsgExtracted === "function") {
+          opts.onMsgExtracted(msg.id, msg, sf.fileName);
+        }
 
-          if (!opts.extractOnly) {
-            // Convert translations to raw json object
-            return ts.createPropertyAssignment(
-              prop.name,
-              ts.createObjectLiteral(
-                ts.createNodeArray(
-                  Object.keys(msg)
-                    // No need to output `description` key,
-                    // it's typically for translation vendor only
-                    .filter(k => k !== "description")
-                    .map((k: keyof MessageDescriptor) =>
-                      ts.createPropertyAssignment(
-                        ts.createIdentifier(k),
-                        ts.createLiteral(msg[k])
-                      )
-                    )
-                )
-              )
-            );
-          }
-        });
-
-        return ts.createObjectLiteral(props);
+        return ts.createObjectLiteral([
+          ts.createPropertyAssignment("id", ts.createStringLiteral(msg.id)),
+          ts.createPropertyAssignment(
+            "defaultMessage",
+            ts.createStringLiteral(msg.defaultMessage)
+          )
+        ]);
       };
       return visitor;
     }

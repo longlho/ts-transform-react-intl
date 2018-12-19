@@ -8,27 +8,25 @@ describe("extractDefineMessages", function() {
     expect(
       compile(resolve(__dirname, "fixture/defineMessage.ts"))
     ).to.deep.equal({
-      bar: {
+      "3nxZQB0eo3": {
         id: "3nxZQB0eo3",
         description: "description bar",
         defaultMessage: "defaultMessage bar"
       },
-      foo: {
+      jv83iiJolI: {
         id: "jv83iiJolI",
         description: "description foo",
         defaultMessage: "defaultMessage foo"
       }
     });
-
-    expect(require("./fixture/defineMessage.js").strings).to.deep.equal({
-      foo: {
-        id: "jv83iiJolI",
-        defaultMessage: "defaultMessage foo"
-      },
-      bar: {
-        id: "3nxZQB0eo3",
-        defaultMessage: "defaultMessage bar"
-      }
+    const strings = require("./fixture/defineMessage.js");
+    expect(strings.foo).to.deep.equal({
+      id: "jv83iiJolI",
+      defaultMessage: "defaultMessage foo"
+    });
+    expect(strings.bar).to.deep.equal({
+      id: "3nxZQB0eo3",
+      defaultMessage: "defaultMessage bar"
     });
   });
 
@@ -36,27 +34,25 @@ describe("extractDefineMessages", function() {
     expect(
       compile(resolve(__dirname, "fixture/messageAlias.ts"))
     ).to.deep.equal({
-      bar: {
+      "3nxZQB0eo3": {
         id: "3nxZQB0eo3",
         description: "description bar",
         defaultMessage: "defaultMessage bar"
       },
-      foo: {
+      jv83iiJolI: {
         id: "jv83iiJolI",
         description: "description foo",
         defaultMessage: "defaultMessage foo"
       }
     });
-
-    expect(require("./fixture/messageAlias.js").strings).to.deep.equal({
-      foo: {
-        id: "jv83iiJolI",
-        defaultMessage: "defaultMessage foo"
-      },
-      bar: {
-        id: "3nxZQB0eo3",
-        defaultMessage: "defaultMessage bar"
-      }
+    const strings = require("./fixture/defineMessage.js");
+    expect(strings.foo).to.deep.equal({
+      id: "jv83iiJolI",
+      defaultMessage: "defaultMessage foo"
+    });
+    expect(strings.bar).to.deep.equal({
+      id: "3nxZQB0eo3",
+      defaultMessage: "defaultMessage bar"
     });
   });
 });
