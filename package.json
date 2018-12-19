@@ -30,32 +30,32 @@
   },
   "homepage": "https://github.com/longlho/ts-transform-react-intl#readme",
   "devDependencies": {
-    "@types/chai": "^4.1.6",
+    "@types/chai": "^4.1.7",
     "@types/fs-extra": "^5.0.0",
     "@types/glob": "^7.1.1",
     "@types/mocha": "^5.0.0",
     "@types/node": "^10.12.17",
     "@types/react": "^16.7.11",
-    "@types/react-intl": "^2.3.11",
+    "@types/react-intl": "^2.3.14",
     "chai": "^4.2.0",
-    "fs-extra": "^7.0.0",
+    "fs-extra": "^7.0.1",
     "glob": "^7.1.3",
     "mocha": "^5.0.0",
     "pre-commit": "^1.2.2",
-    "prettier": "^1.9.2",
-    "react": "^16.2.0",
-    "react-intl": "^2.7.1",
-    "ts-node": "^7.0.0",
-    "travis-deploy-once": "^5.0.9",
-    "semantic-release": "^15.9.17"
+    "prettier": "^1.15.3",
+    "react": "^16.6.3",
+    "react-intl": "^2.7.2",
+    "semantic-release": "^15.13.1",
+    "travis-deploy-once": "^5.0.11",
+    "ts-node": "^7.0.0"
   },
   "pre-commit": [
     "prettier",
     "test"
   ],
   "dependencies": {
-    "typescript": "3",
     "@types/loader-utils": "^1.1.3",
-    "loader-utils": "^1.1.0"
+    "loader-utils": "^1.1.0",
+    "typescript": "3"
   }
 }
