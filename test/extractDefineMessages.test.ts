@@ -3,7 +3,7 @@ import { resolve } from "path";
 import { expect } from "chai";
 
 describe("extractDefineMessages", function() {
-  this.timeout(5000);
+  this.timeout(10000);
   it("should be able to extract messages with our macro", function() {
     expect(
       compile(resolve(__dirname, "fixture/defineMessage.ts"))
