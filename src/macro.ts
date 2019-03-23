@@ -1,3 +1,3 @@
 export function _<T>(messages: T): T {
-  return messages;
+    return messages
 }
